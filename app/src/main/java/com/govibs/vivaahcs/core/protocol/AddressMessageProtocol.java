@@ -3,47 +3,32 @@ package com.govibs.vivaahcs.core.protocol;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * This is the address message protocol which controls the address locations
  * Created by Vibhor on 12/21/16.
  */
 
-public class AddressMessageProtocol implements Parcelable {
+public class AddressMessageProtocol implements Serializable {
 
 
     private int locationId;
     private String locationDescription;
 
-    public AddressMessageProtocol(Parcel in) {
-        this.locationId = in.readInt();
-        this.locationDescription = in.readString();
+    public int getLocationId() {
+        return locationId;
     }
 
-    /**
-     * Creator for address message protocol
-     */
-    public static final Parcelable.Creator<AddressMessageProtocol> CREATOR =
-            new Parcelable.Creator<AddressMessageProtocol>() {
-
-                @Override
-                public AddressMessageProtocol createFromParcel(Parcel in) {
-                    return new AddressMessageProtocol(in);
-                }
-
-                @Override
-                public AddressMessageProtocol[] newArray(int size) {
-                    return new AddressMessageProtocol[size];
-                }
-            };
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(locationId);
-        parcel.writeString(locationDescription);
+    public String getLocationDescription() {
+        return locationDescription;
+    }
+
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
     }
 }

@@ -1,5 +1,6 @@
 package com.govibs.vivaahcs;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,14 +15,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.govibs.vivaahcs.core.VivaManager;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int RC_PERMISSION_WIFI_NETWORK = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkInteractionsWithPermission();
     }
 
     @Override
@@ -81,6 +95,15 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+
     /**
      * Initialize Views
      */
@@ -105,6 +128,22 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @AfterPermissionGranted(RC_PERMISSION_WIFI_NETWORK)
+    private void checkInteractionsWithPermission() {
+        String[] perms = {Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_MULTICAST_STATE,
+                Manifest.permission.ACCESS_FINE_LOCATION};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            VivaManager.getInstance().initialize();
+        } else {
+            EasyPermissions.requestPermissions(this,
+                    getString(R.string.text_rationale_permission_request),
+                    RC_PERMISSION_WIFI_NETWORK, perms);
+        }
+
     }
 
 }
