@@ -1,8 +1,11 @@
 package com.govibs.vivaahcs.core;
 
+import android.content.Context;
+
 import com.govibs.vivaahcs.core.message.MessageFactory;
 import com.govibs.vivaahcs.core.message.StartAppOnTvVivaMessage;
 import com.govibs.vivaahcs.core.message.VivaMessage;
+import com.govibs.vivaahcs.core.network.VivaNetworkManager;
 
 /**
  * VIVA - AHCS monitor
@@ -43,15 +46,18 @@ public class VivaManager {
     }
 
     /**
-     * Send Command
+     * Send Command.
+     * @param context the calling application context
      * @param commandType {@link CommandType}
      */
-    public void sendCommand(CommandType commandType) {
+    public void sendCommand(Context context, CommandType commandType) {
         switch (commandType) {
             case COMMAND_TYPE_START_APPLICATION_ON_TV:
                 if (isInitialized()) {
                     VivaMessage vivaMessage = MessageFactory.createMessage(
                                     MessageFactory.MessageType.MESSAGE_TYPE_START_APP_ON_TV);
+                    VivaNetworkManager vivaNetworkManager = new VivaNetworkManager(context);
+
                 }
                 break;
         }
